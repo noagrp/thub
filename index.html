@@ -76,11 +76,12 @@
         render(allChannels);
     }
 
-    function render(list) {
-        document.getElementById('items').innerHTML = list.map(c => 
-            `<div class="list-group-item" onclick="play('${c.url}')">${c.name}</div>`
-        ).join('');
-    }
+function render(list) {
+    document.getElementById('items').innerHTML = list.map(c => 
+        // We use encodeURIComponent to ensure the URL doesn't break the code
+        `<div class="list-group-item" onclick="play('${encodeURIComponent(c.url)}')">${c.name}</div>`
+    ).join('');
+}
 
     function filterChannels() {
         const query = document.getElementById('search-box').value.toLowerCase();
@@ -98,11 +99,12 @@
         list.style.display = (list.style.display === 'block') ? 'none' : 'block';
     }
 
-    function play(url) {
-        hls.loadSource(url);
-        hls.attachMedia(player);
-        player.play();
-    }
+function play(encodedUrl) {
+    const url = decodeURIComponent(encodedUrl);
+    hls.loadSource(url);
+    hls.attachMedia(player);
+    player.play();
+}
 </script>
 </body>
 </html>
